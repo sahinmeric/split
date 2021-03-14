@@ -8,17 +8,25 @@ var randomNumber = Math.floor(Math.random() * imageList.length + 1);
 // With random number we generate a image name variable
 var imageSrc = "images/" + imageList[randomNumber] + ".jpg";
 
-// We will use canvas to split an image
+//Show the image at the left side of the screen
+document.getElementById("original").setAttribute("src", imageSrc);
+
+//Creating the <canvas> element to use as a container for images.
 var canvas = document.createElement("canvas");
+
+//The getContext() method returns an object that provides methods and properties for drawing on the canvas.
 var ctx = canvas.getContext("2d");
 
 //We will create an empty array to save the parts of the splitted image
 var parts = [];
+
+//An instance of an Image object
 var img = new Image();
 
-//We will set image source to randomly generated image route
+//We will set image source to randomly generated image source that we created before
 img.src = imageSrc;
 
+//When image is loaded run the split method
 img.onload = split_4;
 
 //Here we are splitting the image into 4 parts
@@ -45,6 +53,7 @@ function split_4() {
     var div = document.getElementById("right");
     div.appendChild(slicedImage);
     slicedImage.setAttribute("id", "part" + [i]);
+    //style="width:128px;height:128px;" can be used also
     slicedImage.setAttribute("width", "96", "height", "96");
     slicedImage.setAttribute(
       "style",
@@ -52,7 +61,6 @@ function split_4() {
     );
   }
 
-  document.getElementById("original").setAttribute("src", imageSrc);
   //TODO: for loop?
   //ENABLE IMAGE CONTROLS
   document.getElementById("part0").addEventListener("click", rotate);
