@@ -10,23 +10,48 @@ var imageList = [
   "cat6",
   "cat7",
 ];
-var dXdY = [
+var dXdY2 = [
   [0, 0],
   [-1, 0],
   [0, -1],
   [-1, -1],
+];
+var dXdY3 = [
+  [0, 0],
+  [-1, 0],
+  [-2, 0],
+  [0, -1],
+  [-1, -1],
+  [-2, -1],
   [0, -2],
   [-1, -2],
   [-2, -2],
+];
+var dXdY4 = [
+  [0, 0],
+  [-1, 0],
   [-2, 0],
+  [-3, 0],
+  [0, -1],
+  [-1, -1],
   [-2, -1],
+  [-3, -1],
+  [0, -2],
+  [-1, -2],
+  [-2, -2],
+  [-3, -2],
+  [0, -3],
+  [-1, -3],
+  [-2, -3],
+  [-3, -3],
 ];
 
 //Define how many pieces we want to slice the image 4-9-16-25-36
-var sliceInto = 9;
+var sliceInto = 16; //1-TODO 4-9-16-25-36
 
 //We generate a random number and pass it to a variable
-var randomNumber = Math.floor(Math.random() * imageList.length);
+var randomNumber = 4;
+//Math.floor(Math.random() * imageList.length);
 
 // With random number we generate a image name variable
 var imageSrc = "images/" + imageList[randomNumber] + ".jpg";
@@ -55,11 +80,15 @@ img.onload = split;
 //Here we are splitting the image into parts
 function split() {
   //we are going to divide image width and height into square root of given sliceInto value
-  // for example ıf we want to divide ınto 9 pıeces , the image w and h must be divided into 3, the square root of 9
-  var div = Math.sqrt(sliceInto);
+  // for example ıf we want to divide into 9 pıeces , the image w and h must be divided into 3, the square root of 9
+  var divider = Math.sqrt(sliceInto);
 
-  var dividedWidth = img.width / div;
-  var dividedHeight = img.height / div;
+  var length = 480 / divider;
+  var width = "width: " + length + "px;";
+  var height = "height: " + length + "px;";
+
+  var dividedWidth = img.width / divider;
+  var dividedHeight = img.height / divider;
 
   canvas.width = dividedWidth;
   canvas.height = dividedHeight;
@@ -67,9 +96,27 @@ function split() {
   for (let i = 0; i < sliceInto; i++) {
     //we take the array from the dXdY array of arrays and push the value pair to a newArray as a seperated value.
     var newArray = [];
-    dXdY[i].forEach((element) => {
-      newArray.push(element);
-    });
+    switch (sliceInto) {
+      case 4:
+        dXdY2[i].forEach((element) => {
+          //TODO for sliceInto 4 this must be dxdy2, for 9-dxdy3, for 16-dxdy4 and so on
+          newArray.push(element);
+        });
+        break;
+      case 9:
+        dXdY3[i].forEach((element) => {
+          newArray.push(element);
+        });
+        break;
+      case 16:
+        dXdY4[i].forEach((element) => {
+          newArray.push(element);
+        });
+        break;
+      default:
+        break;
+    }
+
     // we assign this seperated value pair to x and y
     var x = newArray[0];
     var y = newArray[1];
@@ -86,10 +133,8 @@ function split() {
       img.width,
       img.height
     );
-
+    //console.log("x : " + x + " y : " +y);
     parts.push(canvas.toDataURL());
-
-    
 
     var col = document.getElementById("right");
     var div = document.createElement("div");
@@ -99,24 +144,33 @@ function split() {
     col.appendChild(div);
     div.appendChild(slicedImage);
 
-    div.setAttribute("class","column");
+    div.setAttribute("class", "column");
     slicedImage.setAttribute("id", "part" + [i]);
     slicedImage.setAttribute("class", "sliced");
-    //style="width:128px;height:128px;" can be used also
-    // slicedImage.setAttribute("width", canvas.width, "height", canvas.height);
-    slicedImage.setAttribute(
-      "style",
-      "transform: rotate(" + randomDeg * 45 + "deg)"
-    );
+
+    //TODO: change .sliced width and height (480 / divider)px
+    //slicedImage.setAttribute("width","240px", "height", "240px");
+
+    //TODO:change .column 100% / divider)<
+
+    // slicedImage.setAttribute(
+    //   "style",
+    //   "transform: rotate(" + randomDeg * 45 + "deg)"
+    // );
   }
+
+  document.querySelectorAll(".sliced").forEach((item) => {
+    item.setAttribute("style", width);
+    item.setAttribute("style", height);
+  });
 
   //TODO: for loop?
   //ENABLE IMAGE CONTROLS
   //Any element with 'part' in the id will have the 'rotate' and 'checkStatus' eventListeners added
-  document.querySelectorAll("div[id*='part]").forEach(item => {
-    item.addEventListener('click', rotate);
-    item.addEventListener('click', checkStatus)
-  })
+  document.querySelectorAll("div[id*='part]").forEach((item) => {
+    item.addEventListener("click", rotate);
+    item.addEventListener("click", checkStatus);
+  });
 }
 
 // TODO: for loop?
