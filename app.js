@@ -75,7 +75,7 @@ var dXdY5 = [
 ];
 
 //Define how many pieces we want to slice the image 4-9-16-25-36
-var sliceInto = 25; //1-TODO 4-9-16-25-36
+var sliceInto = 4; //1-TODO 4-9-16-25-36
 
 //We generate a random number and pass it to a variable
 var randomNumber = 4;
@@ -195,6 +195,7 @@ function split() {
     item.setAttribute("style", heightPercentage);
   });
 
+  //TODO: create a addevListener function outside of split and call it at the end of the split func
   //Any element with 'part' in the id will have the 'rotate' and 'checkStatus' eventListeners added
   document.querySelectorAll(".sliced").forEach((item) => {
     item.addEventListener("click", rotate);
@@ -202,39 +203,31 @@ function split() {
   });
 }
 
-// TODO: for loop?
+//DONE-find a better way to check status
 function checkStatus() {
-  //GET HTML ELEMENT TRANSFORM VALUES
-  var part0Degree = document.getElementById("part0").style.transform;
-  var part1Degree = document.getElementById("part1").style.transform;
-  var part2Degree = document.getElementById("part2").style.transform;
-  var part3Degree = document.getElementById("part3").style.transform;
+  var slicedImages = document.getElementsByClassName("sliced"); //degrees array
+  var degrees = []; //an empty array to push current degree of each sliced image
 
-  //TODO better/shorter way?
-  if (part0Degree === "rotate(360deg)") {
-    if (part1Degree === "rotate(360deg)") {
-      if (part2Degree === "rotate(360deg)") {
-        if (part3Degree === "rotate(360deg)") {
-          //TODO: before calling gameover() function remove eventlisteners?
-          //document.getElementById("part0").removeEventListener("click", rotate);
-          gameOver();
-        } else {
-          return;
-        }
-      } else {
-        return;
-      }
-    } else {
-      return;
-    }
+  for (let i = 0; i < slicedImages.length; i++) {
+    const element = slicedImages[i].style.transform;
+    degrees.push(element);
+  }
+
+  //TODO: Create a function to call every click event
+  //Tests whether all elements in the array pass the test implemented by the provided
+  var isCorrectDegree = (currentValue) => currentValue === "rotate(360deg)";
+
+  if (degrees.every(isCorrectDegree) === true) {
+    //TODO:create a removeEvListeners function
+    document.querySelectorAll(".sliced").forEach((item) => {
+      item.removeEventListener("click", rotate);
+      item.removeEventListener("click", checkStatus);
+    });
+    gameOver();
   } else {
     return;
   }
 }
-
-//TODO:remove eventlisteners before calling gameover()
-//for loop to remove?
-
 //When game ends do something.
 //TODO: Show score (Time passed in seconds x 5)
 function gameOver() {
