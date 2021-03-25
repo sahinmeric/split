@@ -75,11 +75,10 @@ var dXdY5 = [
 ];
 
 //Define how many pieces we want to slice the image 4-9-16-25-36
-var sliceInto = 4; //1-TODO 4-9-16-25-36
+var sliceInto = 25; //1-TODO 4-9-16-25-36
 
 //We generate a random number and pass it to a variable
-var randomNumber = 4;
-//Math.floor(Math.random() * imageList.length);
+var randomNumber = Math.floor(Math.random() * imageList.length);
 
 // With random number we generate a image name variable
 var imageSrc = "images/" + imageList[randomNumber] + ".jpg";
@@ -111,10 +110,11 @@ function split() {
   // for example ıf we want to divide into 9 pıeces , the image w and h must be divided into 3, the square root of 9
   var divider = Math.sqrt(sliceInto);
 
+  //480 is the witdh and height of div container that holds the splitted pieces.
+  //we can put this into a variable in the future.
   var length = 480 / divider;
   var width = "width: " + length + "px;"; //every sliced image width will be changed due divider. 480px is constant container width
   var height = "height: " + length + "px;"; //every sliced image height will be changed due divider. 480px is constant container height
-
   var widthPercentage = "width: " + 100 / divider + "%"; // % for column width 25% means 4 images will be shown per row
   var heightPercentage = "height: " + 100 / divider + "%"; // % for column height 25% means 4 images will be shown per row
 
@@ -124,10 +124,11 @@ function split() {
   for (let i = 0; i < sliceInto; i++) {
     //we take the array from the dXdY array of arrays and push the value pair to a newArray as a seperated value.
     var newArray = [];
+
+    //DONE: for sliceInto 4 this must be dxdy2, for 9-dxdy3, for 16-dxdy4 and so on
     switch (sliceInto) {
       case 4:
         dXdY2[i].forEach((element) => {
-          //TODO for sliceInto 4 this must be dxdy2, for 9-dxdy3, for 16-dxdy4 and so on
           newArray.push(element);
         });
         break;
@@ -154,9 +155,9 @@ function split() {
     var x = newArray[0];
     var y = newArray[1];
 
-    //We generate another random number for the rotate splitted parts of the image
-    var randomDeg = Math.floor(Math.random() * 3 + 1); // Random number between 1-4
-
+    //DONE:refactor-We generate another random number for the rotate splitted parts of the image
+    var randomDegree =
+      "transform: rotate(" + 45 * Math.floor(Math.random() * 3 + 1) + "deg);";
     ctx.drawImage(
       this,
       x * (img.width / divider),
@@ -176,19 +177,14 @@ function split() {
     div.appendChild(slicedImage);
 
     div.setAttribute("class", "column");
-    //TODO: Can we pass widthPercentage and heightPercentage together?
-    div.setAttribute("style", widthPercentage);
-    div.setAttribute("style", heightPercentage);
+    //DONE: Can we pass widthPercentage and heightPercentage together?
+    div.setAttribute("style", widthPercentage + heightPercentage);
+    //div.setAttribute("style", heightPercentage);
     slicedImage.setAttribute("id", "part" + [i]);
     slicedImage.setAttribute("class", "sliced");
-    //TODO:Can we pass width and height together?
-    slicedImage.setAttribute("style", width);
-    slicedImage.setAttribute("style", height);
-
-    // slicedImage.setAttribute(
-    //   "style",
-    //   "transform: rotate(" + randomDeg * 45 + "deg)"
-    // );
+    //DONE:Can we pass width and height together?
+    slicedImage.setAttribute("style", width + height + randomDegree);
+    //slicedImage.setAttribute("style", height);
   }
   document.querySelectorAll(".column").forEach((item) => {
     item.setAttribute("style", widthPercentage);
@@ -213,8 +209,7 @@ function checkStatus() {
     degrees.push(element);
   }
 
-  //TODO: Create a function to call every click event
-  //Tests whether all elements in the array pass the test implemented by the provided
+  //DONE:Tests whether all elements in the array pass the test implemented by the provided
   var isCorrectDegree = (currentValue) => currentValue === "rotate(360deg)";
 
   if (degrees.every(isCorrectDegree) === true) {
