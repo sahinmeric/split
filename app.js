@@ -75,7 +75,7 @@ var dXdY5 = [
 ];
 
 //Define how many pieces we want to slice the image 4-9-16-25-36
-var sliceInto = 25; //1-TODO 4-9-16-25-36
+var sliceInto = 4; //1-TODO 4-9-16-25-36
 
 //We generate a random number and pass it to a variable
 var randomNumber = Math.floor(Math.random() * imageList.length);
