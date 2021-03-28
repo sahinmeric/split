@@ -191,8 +191,12 @@ function split() {
     item.setAttribute("style", heightPercentage);
   });
 
-  //TODO: create a addevListener function outside of split and call it at the end of the split func
+  //DONE: create a addevListener function outside of split and call it at the end of the split func
   //Any element with 'part' in the id will have the 'rotate' and 'checkStatus' eventListeners added
+  addEvLisCheckAndRotate();
+}
+
+function addEvLisCheckAndRotate() {
   document.querySelectorAll(".sliced").forEach((item) => {
     item.addEventListener("click", rotate);
     item.addEventListener("click", checkStatus);
@@ -213,16 +217,20 @@ function checkStatus() {
   var isCorrectDegree = (currentValue) => currentValue === "rotate(360deg)";
 
   if (degrees.every(isCorrectDegree) === true) {
-    //TODO:create a removeEvListeners function
-    document.querySelectorAll(".sliced").forEach((item) => {
-      item.removeEventListener("click", rotate);
-      item.removeEventListener("click", checkStatus);
-    });
+    //DONE:create a removeEvListeners function
+    remEvLisCheckAndRotate();
     gameOver();
   } else {
     return;
   }
 }
+function remEvLisCheckAndRotate() {
+  document.querySelectorAll(".sliced").forEach((item) => {
+    item.removeEventListener("click", rotate);
+    item.removeEventListener("click", checkStatus);
+  });
+}
+
 //When game ends do something.
 //TODO: Show score (Time passed in seconds x 5)
 function gameOver() {
